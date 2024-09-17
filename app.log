@@ -1,0 +1,57 @@
+2024-09-14 22:05:05,232 - INFO - "GET /?state=PcTk8AvKh0rw0fQHX3wrKaamBUs48p&code=4/0AQlEd8w0mIHv4AiLE147BcG_wKIN83tNP74DI8wBJV-kGMCt9UGxBARfn_muuJ5-YWx4jA&scope=https://www.googleapis.com/auth/drive.file HTTP/1.1" 200 65
+2024-09-14 22:05:05,439 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-14 22:17:52,589 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-14 22:21:51,323 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-14 22:22:25,448 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-14 22:31:13,703 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-14 22:39:34,638 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-14 22:41:43,269 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-14 22:42:35,030 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-14 22:48:01,187 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-14 22:50:38,751 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-14 22:53:02,279 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-14 22:54:15,602 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-14 22:54:44,001 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-14 22:54:53,885 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-14 22:56:36,107 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-14 23:02:39,062 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-14 23:06:09,227 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-14 23:06:44,406 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-14 23:12:53,009 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-16 16:21:47,049 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-16 16:54:28,822 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-16 16:57:02,449 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-16 17:06:09,822 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-16 17:25:15,877 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-16 17:27:29,669 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-16 18:04:52,673 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-16 18:31:30,928 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-16 19:05:40,762 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-16 19:07:45,956 - INFO - Downloaded C:/Users/CTL 32/Downloads/ZoomRecordings\(vivek_codingal) Vivek's Personal Meeting Room 2021-12-02 06-20\shared_screen_with_speaker_view.mp4, Size: 693103893 bytes, Time: 120.51 seconds, Speed: 5.49 MB/s
+2024-09-16 19:08:00,139 - INFO - Downloaded C:/Users/CTL 32/Downloads/ZoomRecordings\(vivek_codingal) Vivek's Personal Meeting Room 2021-12-02 06-20\chat_file.txt, Size: 326 bytes, Time: 4.07 seconds, Speed: 0.00 MB/s
+2024-09-16 19:11:20,718 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-16 19:13:41,007 - INFO - Downloaded C:/Users/CTL 32/Downloads/ZoomRecordings\(vivek_codingal) Vivek's Personal Meeting Room 2021-12-02 06-20\shared_screen_with_speaker_view.mp4, Size: 693103893 bytes, Time: 131.60 seconds, Speed: 5.02 MB/s
+2024-09-16 19:13:53,081 - INFO - Downloaded C:/Users/CTL 32/Downloads/ZoomRecordings\(vivek_codingal) Vivek's Personal Meeting Room 2021-12-02 06-20\chat_file.txt, Size: 326 bytes, Time: 1.65 seconds, Speed: 0.00 MB/s
+2024-09-16 19:19:15,286 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-16 19:22:01,499 - INFO - Downloaded C:/Users/CTL 32/Downloads/ZoomRecordings\(vivek_codingal) Vivek's Personal Meeting Room 2021-12-02 06-20\shared_screen_with_speaker_view.mp4, Size: 693103893 bytes, Time: 162.03 seconds, Speed: 4.08 MB/s
+2024-09-16 19:22:12,370 - INFO - Downloaded C:/Users/CTL 32/Downloads/ZoomRecordings\(vivek_codingal) Vivek's Personal Meeting Room 2021-12-02 06-20\chat_file.txt, Size: 326 bytes, Time: 0.61 seconds, Speed: 0.00 MB/s
+2024-09-16 19:29:25,583 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-16 19:30:07,525 - INFO - Downloaded C:/Users/CTL 32/Downloads/ZoomRecordings\(vivek_codingal) Vivek's Personal Meeting Room 2021-12-02 06-20\shared_screen_with_speaker_view.mp4, Size: 693103893 bytes, Time: 36.50 seconds, Speed: 18.11 MB/s
+2024-09-16 19:30:19,116 - INFO - Downloaded C:/Users/CTL 32/Downloads/ZoomRecordings\(vivek_codingal) Vivek's Personal Meeting Room 2021-12-02 06-20\chat_file.txt, Size: 326 bytes, Time: 1.37 seconds, Speed: 0.00 MB/s
+2024-09-16 19:31:08,035 - INFO - file_cache is only supported with oauth2client<4.0.0
+2024-09-16 19:31:19,543 - INFO - Downloaded C:/Users/CTL 32/Downloads/ZoomRecordings\(vivek_codingal) Vivek's Personal Meeting Room 2021-12-02 06-20\shared_screen_with_speaker_view.mp4, Size: 693103893 bytes, Time: 7.20 seconds, Speed: 91.77 MB/s
+2024-09-16 19:32:36,125 - INFO - Uploaded C:/Users/CTL 32/Downloads/ZoomRecordings\(vivek_codingal) Vivek's Personal Meeting Room 2021-12-02 06-20\shared_screen_with_speaker_view.mp4, Size: 693103893 bytes, Time: 76.58 seconds, Speed: 8.63 MB/s
+2024-09-16 19:32:36,870 - INFO - Downloaded C:/Users/CTL 32/Downloads/ZoomRecordings\(vivek_codingal) Vivek's Personal Meeting Room 2021-12-02 06-20\chat_file.txt, Size: 326 bytes, Time: 0.60 seconds, Speed: 0.00 MB/s
+2024-09-16 19:32:38,860 - INFO - Uploaded C:/Users/CTL 32/Downloads/ZoomRecordings\(vivek_codingal) Vivek's Personal Meeting Room 2021-12-02 06-20\chat_file.txt, Size: 326 bytes, Time: 1.99 seconds, Speed: 0.00 MB/s
+2024-09-16 19:32:44,973 - INFO - Downloaded C:/Users/CTL 32/Downloads/ZoomRecordings\(vivek_codingal) Vivek's Personal Meeting Room 2021-12-02 06-20\audio_only.m4a, Size: 73207470 bytes, Time: 6.11 seconds, Speed: 11.42 MB/s
+2024-09-16 19:32:55,281 - INFO - Uploaded C:/Users/CTL 32/Downloads/ZoomRecordings\(vivek_codingal) Vivek's Personal Meeting Room 2021-12-02 06-20\audio_only.m4a, Size: 73207470 bytes, Time: 10.31 seconds, Speed: 6.77 MB/s
+2024-09-16 19:33:06,267 - INFO - Downloaded C:/Users/CTL 32/Downloads/ZoomRecordings\(vivek_codingal) Vivek's Personal Meeting Room 2021-11-24 05-59\shared_screen_with_speaker_view.mp4, Size: 142366658 bytes, Time: 9.89 seconds, Speed: 13.73 MB/s
+2024-09-16 19:33:24,144 - INFO - Uploaded C:/Users/CTL 32/Downloads/ZoomRecordings\(vivek_codingal) Vivek's Personal Meeting Room 2021-11-24 05-59\shared_screen_with_speaker_view.mp4, Size: 142366658 bytes, Time: 17.88 seconds, Speed: 7.59 MB/s
+2024-09-16 19:33:28,836 - INFO - Downloaded C:/Users/CTL 32/Downloads/ZoomRecordings\(vivek_codingal) Vivek's Personal Meeting Room 2021-11-24 05-59\audio_only.m4a, Size: 40125063 bytes, Time: 4.66 seconds, Speed: 8.21 MB/s
+2024-09-16 19:33:35,807 - INFO - Uploaded C:/Users/CTL 32/Downloads/ZoomRecordings\(vivek_codingal) Vivek's Personal Meeting Room 2021-11-24 05-59\audio_only.m4a, Size: 40125063 bytes, Time: 6.96 seconds, Speed: 5.50 MB/s
+2024-09-16 19:33:38,098 - INFO - Downloaded C:/Users/CTL 32/Downloads/ZoomRecordings\(vivek_codingal) Vivek's Personal Meeting Room 2021-11-05 10-23\chat_file.txt, Size: 1885 bytes, Time: 1.50 seconds, Speed: 0.00 MB/s
+2024-09-16 19:33:41,141 - INFO - Uploaded C:/Users/CTL 32/Downloads/ZoomRecordings\(vivek_codingal) Vivek's Personal Meeting Room 2021-11-05 10-23\chat_file.txt, Size: 1885 bytes, Time: 3.04 seconds, Speed: 0.00 MB/s
+2024-09-16 19:34:42,380 - INFO - Downloaded C:/Users/CTL 32/Downloads/ZoomRecordings\(vivek_codingal) Vivek's Personal Meeting Room 2021-11-05 10-23\shared_screen_with_speaker_view.mp4, Size: 801412494 bytes, Time: 61.24 seconds, Speed: 12.48 MB/s
+2024-09-16 19:38:01,887 - INFO - Uploaded C:/Users/CTL 32/Downloads/ZoomRecordings\(vivek_codingal) Vivek's Personal Meeting Room 2021-11-05 10-23\shared_screen_with_speaker_view.mp4, Size: 801412494 bytes, Time: 199.51 seconds, Speed: 3.83 MB/s
+2024-09-16 19:38:17,009 - INFO - Downloaded C:/Users/CTL 32/Downloads/ZoomRecordings\(vivek_codingal) Vivek's Personal Meeting Room 2021-11-05 10-23\audio_only.m4a, Size: 143073512 bytes, Time: 15.00 seconds, Speed: 9.10 MB/s
+2024-09-16 19:38:45,711 - INFO - Uploaded C:/Users/CTL 32/Downloads/ZoomRecordings\(vivek_codingal) Vivek's Personal Meeting Room 2021-11-05 10-23\audio_only.m4a, Size: 143073512 bytes, Time: 28.70 seconds, Speed: 4.75 MB/s
