@@ -1,0 +1,6 @@
+{
+    "base_dir": "<path-to-zoom-recordings-on-local-google-drive>",  // e.g., "G:\\My Drive\\Zoom Recordings"
+    "start_date": "<yyyy-mm-dd>",            					    // e.g., "2020-06-01"
+    "end_date": "<yyyy-mm-dd>",               						// e.g., "2024-09-15"
+    "access_token_refresh_frequency": 1800    						// Time in seconds (default 1800s = 30 min)
+}

@@ -1,26 +1,12 @@
 import os
 import requests
-import google.auth
-from google.oauth2 import service_account
-from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google.auth.transport.requests import Request
-import os.path
 import pickle
-from googleapiclient.http import MediaFileUpload
 from dateutil.relativedelta import relativedelta
 import json
 import time
-
 from tqdm import tqdm  # Import tqdm for progress bar
-
-import requests
 import datetime
 import base64
-from dateutil.relativedelta import relativedelta
-
-from googleapiclient.discovery import build
-
 import logging
 from dotenv import load_dotenv
 
@@ -34,10 +20,13 @@ REFRESH_TOKEN = os.getenv('REFRESH_TOKEN')
 CLIENT_ID = os.getenv('CLIENT_ID')
 CLIENT_SECRET = os.getenv('CLIENT_SECRET')
 
+if not all([ACCESS_TOKEN, USER_ID, REFRESH_TOKEN, CLIENT_ID, CLIENT_SECRET]):
+    raise ValueError("Missing one or more environment variables.")
+
 logging.basicConfig(filename='app.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def load_config():
-    config_file = "C:\\Users\\CTL 32\\OneDrive\\Documents\\Zoom Cloud Recording Sync App\\config.json"
+    config_file = "C:\\Users\\CTL-118\\Documents\\zoom-recordings-backup-main\\config.json"
     if not os.path.exists(config_file):
         raise FileNotFoundError(f"Configuration file not found: {config_file}")
     
@@ -61,35 +50,6 @@ def check_zoom_rate_limits():
     print(response.headers.get('X-RateLimit-Remaining'))
     print(response.headers.get('X-RateLimit-Reset'))
 
-def check_drive_quota(service):
-    about = service.about().get(fields='storageQuota').execute()
-    print(about['storageQuota'])
-
-
-# Google Drive API setup
-def authenticate_google_drive(CREDENTIALS_FILE, SCOPES):
-    """Authenticate and create the Google Drive API service."""
-    creds = None
-    
-    # The file token.pickle stores the user's access and refresh tokens, and is created
-    # automatically when the authorization flow completes for the first time.
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
-            creds = pickle.load(token)
-    # If there are no (valid) credentials available, let the user log in.
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS_FILE, SCOPES)
-            creds = flow.run_local_server(port=0)
-        # Save the credentials for the next run
-        with open('token.pickle', 'wb') as token:
-            pickle.dump(creds, token)
-    
-    service = build('drive', 'v3', credentials=creds)
-    return service
-
 def download_recording(url, file_name, expected_size=None):
     max_retries = 3
     retry_delay = 5  # seconds
@@ -98,12 +58,14 @@ def download_recording(url, file_name, expected_size=None):
             start_time = time.time()  # Start time
             response = requests.get(url, stream=True)
             response.raise_for_status()
-
             total_size=0
-            with open(file_name, 'wb') as f:
+
+            with open(file_name, 'wb') as f, tqdm(total=expected_size, unit='B', unit_scale=True, desc=file_name) as pbar:
                 for chunk in response.iter_content(chunk_size=8192):
                     f.write(chunk)
                     total_size += len(chunk)
+                    pbar.update(len(chunk))
+
             end_time = time.time()  # End time
 
              # Check if the downloaded file matches the expected size
@@ -131,33 +93,19 @@ def download_recording(url, file_name, expected_size=None):
             print(f"Download size mismatch: {ve}")
             os.remove(file_name)
 
-def create_drive_folder(service, folder_name, parent_folder_id=None):
-    """Create a folder in Google Drive and return the folder ID."""
-    folder_metadata = {
-        'name': folder_name,
-        'mimeType': 'application/vnd.google-apps.folder',
-        'parents': [parent_folder_id] if parent_folder_id else []
-    }
-    folder = service.files().create(body=folder_metadata, fields='id').execute()
-    print(f"Created folder '{folder_name}' with ID: {folder['id']}")
-    return folder['id']
-
-def create_folders_and_download(recordings_data, base_dir, service, root_folder_id, ACCESS_TOKEN=None):
+def create_folders_and_download(recordings_data, base_dir, ACCESS_TOKEN=None):
 
     for recording in recordings_data:
         # Format the folder name as <topic>_<start_time> in YYYY-MM-DD HH:MM format
         # Format the start_time and replace invalid characters for folder names
         start_time = recording['start_time']
-        formatted_start_time = datetime.datetime.strptime(start_time, "%Y-%m-%dT%H:%M:%SZ").strftime("%Y-%m-%d %H-%M")
+        formatted_start_time = datetime.datetime.strptime(start_time, "%Y-%m-%dT%H:%M:%SZ").strftime("%Y-%m-%d at %H-%M")
         folder_name = f"{recording['topic']} {formatted_start_time}"
 
         # Replace any other potentially invalid characters if necessary (e.g., for Windows)
-        folder_name = folder_name.replace(':', '-').replace('/', '-').replace('\\', '-')
+        folder_name = folder_name.replace(':', '-').replace('/', '-').replace('\\', '-').replace('<','-').replace('>','-').replace('|','-').replace('?','Q').replace('*','asterisk').strip()
 
-        # Create folder in Google Drive
-        meeting_folder_id = create_drive_folder(service, folder_name, root_folder_id)
-
-        # Create folder in local storage
+        # Create folder in local Google Drive folder
         meeting_folder = os.path.join(base_dir, folder_name)
         os.makedirs(meeting_folder, exist_ok=True)
         
@@ -166,95 +114,36 @@ def create_folders_and_download(recordings_data, base_dir, service, root_folder_
                 file_url = file['download_url'] + "?access_token=" + ACCESS_TOKEN
                 file_extension = file['file_extension'].lower()
                 
-                # Use recording_type as the file name
-                local_path = os.path.join(meeting_folder, f"{file['recording_type'].replace(' ', '_')}.{file_extension}")
+                # Convert the strings to datetime objects
+                start_time = datetime.datetime.strptime(file['recording_start'], "%Y-%m-%dT%H:%M:%SZ")
+                end_time = datetime.datetime.strptime(file['recording_end'], "%Y-%m-%dT%H:%M:%SZ")
+
+                # Calculate the duration
+                recording_length = end_time - start_time
+                duration_in_minutes = int(recording_length.total_seconds() // 60) #Convert to minutes
+
+                # Construct the local path using os.path.join, with safe file naming and proper formatting
+                local_path = os.path.join(meeting_folder, f"{file['recording_type'].replace(' ', '_')}_duration_{duration_in_minutes}_minutes.{file_extension}")
 
                 # Fetch the expected size from the metadata
                 expected_size = file.get('file_size', None)
                 
-                # Download and upload each recording file
+                # # Download and upload each recording file
                 download_recording(file_url, local_path, expected_size=expected_size)
-
-                # Ensure the file has content before uploading
-                if os.path.getsize(local_path) < 8:  # Example size threshold (1B)
-                    raise ValueError(f"File {local_path} is too small to upload.")
-
-                upload_to_drive(service, local_path, meeting_folder_id)
-                
-                # Remove the local file after successful upload
-                os.remove(local_path)
 
                 print(f"Folder and files for {recording['uuid']} created and downloaded successfully.")
             except Exception as e:
                 print(f"Error processing meeting {recording['uuid']}: {str(e)}")
-
-
-def upload_to_drive(service, file_path, folder_id):
-    max_retries = 3
-    retry_delay = 5  # seconds
-    for attempt in range(max_retries):
-        try:
-            start_time = time.time()  # Start time
-            file_metadata = {
-            'name': os.path.basename(file_path),
-            'parents': [folder_id]
-            }
-            # Set up the MediaFileUpload with resumable=True
-            media = MediaFileUpload(file_path, resumable=True)
-
-            # Log the file size before upload
-            file_size = os.path.getsize(file_path)
-            print(f"Uploading {file_path}, size: {file_size} bytes")
-
-            # Create the file with the option for resumable upload
-            req = service.files().create(body=file_metadata, media_body=media, fields='id')
-
-            # Create a progress bar
-            progress_bar = tqdm(total=os.path.getsize(file_path), unit='B', unit_scale=True, unit_divisor=1024, desc=f"Uploading {os.path.basename(file_path)}")
-
-            def progress_callback(req, response):
-                if req.resumable_progress:
-                    # Update progress bar
-                    progress_bar.update(req.resumable_progress - progress_bar.n)
-                if response:
-                    # Complete the progress bar if upload is finished
-                    progress_bar.update(file_size - progress_bar.n)
-
-            # Upload the file in chunks
-            response = None
-            while response is None:
-                status, response = req.next_chunk()
-                if status:
-                    progress_callback(status, response)
-
-            end_time = time.time()  # End time
-
-            # Close the progress bar
-            progress_bar.close()
-
-            # Calculate speed
-            time_taken = end_time - start_time
-            speed = file_size / time_taken  # bytes per second
-
-            logging.info(f"Uploaded {file_path}, Size: {file_size} bytes, Time: {time_taken:.2f} seconds, Speed: {speed / (1024 * 1024):.2f} MB/s")
-            print(f"Uploaded {file_path}, Size: {file_size} bytes, Time: {time_taken:.2f} seconds, Speed: {speed / (1024 * 1024):.2f} MB/s")
-            return
-
-        except Exception as e:
-            print(f"Error uploading {file_path}: {e}")
-            if attempt < max_retries - 1:
-                print(f"Retrying in {retry_delay} seconds...")
-                time.sleep(retry_delay)
-            else:
-                print(f"Failed to upload {file_path} after {max_retries} attempts")
+                logging.error(f"An error occurred: {e}", exc_info=True)
 
 
 def encode_credentials(client_id, client_secret):
     credentials = f"{client_id}:{client_secret}"
-    return base64.b64encode(credentials.encode()).decode()
+    return base64.b64encode(credentials.encode()).decode('utf-8')
 
 
 def refresh_access_token():
+    global ACCESS_TOKEN, REFRESH_TOKEN
     token_url = "https://zoom.us/oauth/token"
     headers = {
         "Authorization": f"Basic {encode_credentials(CLIENT_ID, CLIENT_SECRET)}",
@@ -267,13 +156,11 @@ def refresh_access_token():
     response = requests.post(token_url, headers=headers, data=token_data)
     if response.status_code == 200:
         token_info = response.json()
-        global ACCESS_TOKEN
-        ACCESS_TOKEN = token_info['access_token']
         print("Access Token refreshed successfully")
-        return ACCESS_TOKEN
+        ACCESS_TOKEN = token_info['access_token']
+        REFRESH_TOKEN = token_info['refresh_token']
     else:
         print(f"Error refreshing access token: {response.status_code} {response.text}")
-        return None
 
 def fetch_recordings(start_date, end_date):
     url = f"https://api.zoom.us/v2/users/{USER_ID}/recordings"
@@ -290,18 +177,22 @@ def fetch_recordings(start_date, end_date):
 
     recordings = []
     while True:
-        print(f"Request URL: {url}")
-        print(f"Parameters: {params}")
+        #print(f"Request URL: {url}")
+        #print(f"Parameters: {params}")
 
         response = requests.get(url, headers=headers, params=params)
-        print(f"Response Status Code: {response.status_code}")
-        print(f"Response Content: {response.text}")
+        #print(f"Response Status Code: {response.status_code}")
+        #print(f"Response Content: {response.text}")
 
         if response.status_code == 401:  # Invalid access token
             print("Access token invalid, refreshing...")
-            new_token = refresh_access_token()
-            if new_token:
-                headers["Authorization"] = f"Bearer {new_token}"
+
+            old_token = ACCESS_TOKEN
+
+            refresh_access_token()
+
+            if ACCESS_TOKEN != old_token:
+                headers["Authorization"] = f"Bearer {ACCESS_TOKEN}"
                 response = requests.get(url, headers=headers, params=params)
                 print("Access Token refreshed successfully")
             else:
@@ -310,11 +201,11 @@ def fetch_recordings(start_date, end_date):
         
         if response.status_code == 200:
             data = response.json()
-            print(f"Data received for page:")
+            #print(f"Data received for page:")
             print(f"From: {data['from']} To: {data['to']}")
             print(f"Total Records: {data['total_records']}")
             if data.get('meetings'):
-                print(f"Sample Meeting: {data['meetings'][0]['topic']} | {data['meetings'][0]['start_time']}")
+                #print(f"Sample Meeting: {data['meetings'][0]['topic']} | {data['meetings'][0]['start_time']}")
                 recordings.extend(data['meetings'])  # Collect meetings data
             else:
                 print("No meetings found in this time period.")
@@ -340,38 +231,59 @@ def fetch_recordings(start_date, end_date):
 def main():
     try:
         config = load_config()
-        base_dir = config['base_dir']
+        base_dir = os.path.join(config['base_dir'], USER_ID)
         start_date = config['start_date']
-        end_date = config['end_date']
+        config_end_date = config['end_date']
         today = datetime.date.today()
 
-        CREDENTIALS_FILE = config['credentials_file']
-        # Scopes required by your application
-        SCOPES = ['https://www.googleapis.com/auth/drive.file']
-        service = authenticate_google_drive(CREDENTIALS_FILE, SCOPES)
+        # Initialize access token timer and refresh frequency
+        access_token_refresh_frequency = config.get('access_token_refresh_frequency', 3500)  # default to 1 hour if not set
+        access_token_elapsed_time = time.time()
 
-        root_folder_id = config['upload_path']
+        # Initial access token refresh
+        refresh_access_token()
 
         check_zoom_rate_limits()
-        check_drive_quota(service)
 
         while True:
+            # Refresh access token if time exceeds the refresh frequency
+            if time.time() - access_token_elapsed_time >= access_token_refresh_frequency:
+                refresh_access_token()
+                access_token_elapsed_time = time.time()
+
+            # Calculate end_date as the earlier of 'start_date + 1 month' and 'config_end_date'
+            calculated_end_date = (datetime.datetime.strptime(start_date, "%Y-%m-%d") + relativedelta(months=1) - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+            end_date = min(calculated_end_date, config_end_date)
+
+            # Print statement for clarity during testing
+            print(f"Fetching recordings from {start_date} to {end_date}")
+
             recordings_data = fetch_recordings(start_date, end_date)
+            
+            # No recordings found for this period but continue to the next month
             if not recordings_data:
-                break
+                print(f"No recordings found from {start_date} to {end_date}, moving to the next month.")
+                start_date = (datetime.datetime.strptime(end_date, "%Y-%m-%d") + datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+                if start_date > config_end_date:  # Break if we're past the config's end_date
+                    break
+                continue
 
             # Create folders and download files while preserving structure
             print("Starting folder creation and download process...")
-            create_folders_and_download(recordings_data, base_dir, service, root_folder_id, ACCESS_TOKEN)
+            create_folders_and_download(recordings_data, base_dir, ACCESS_TOKEN)
             print("Folder creation and download completed.")
 
             # Move to the next month
-            start_date = end_date
-            end_date = (datetime.strptime(end_date, "%Y-%m-%d") + relativedelta(months=1) - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+            start_date = (datetime.datetime.strptime(end_date, "%Y-%m-%d") + datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+
+            # Break if we've passed the final end_date from the config
+            if start_date > config_end_date:
+                break
         
         print("All recordings processed and uploaded successfully.")
     except Exception as e:
         print(f"An error occurred: {e}")
+        logging.error(f"An error occurred: {e}", exc_info=True)
     
 if __name__ == "__main__":
     main()

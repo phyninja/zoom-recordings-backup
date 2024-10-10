@@ -2,13 +2,18 @@ import base64
 import requests
 import webbrowser
 from flask import Flask, request
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
 
 # Your Zoom App credentials
-CLIENT_ID = "6oJEqeAPQjGt29BZiwAHvw"
-CLIENT_SECRET = "Dl5fq3iDgm6dJPzT04JQfnRGZpnWqKND"
-REDIRECT_URI = "http://localhost:5000/redirect"
+CLIENT_ID = os.getenv("CLIENT_ID")
+CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+REDIRECT_URI = os.getenv("REDIRECT_URI")
 AUTHORIZE_URL = "https://zoom.us/oauth/authorize"
 TOKEN_URL = "https://zoom.us/oauth/token"
 
@@ -52,8 +57,11 @@ def get_auth_code():
             try:
                 token_info = response.json()
                 access_token = token_info['access_token']
+                refresh_token = token_info['refresh_token']
                 print(f"Access Token: {access_token}")
                 return f"Access Token Received: {access_token}"
+                print(f"Refresh Token: {refresh_token}")
+                return f"Refresh Token Received: {refresh_token}"
             except KeyError:
                 return "Error: 'access_token' not found in the response."
         else:
