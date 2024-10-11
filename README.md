@@ -19,7 +19,9 @@ Visit the Zoom Marketplace and get the `Client ID` and `Client Secret` from the 
 
 ### 4. Set Up the Configuration File
 1. Copy the example configuration file:
-```cp config.example.json config.json```
+```bash
+cp config.example.json config.json
+```
 
 2. Fill in the real values in `config.json` as per your setup:
 - `base_dir`: The directory where your Zoom recordings are stored.
@@ -32,15 +34,21 @@ Visit the Zoom Marketplace and get the `Client ID` and `Client Secret` from the 
 
 ### 6. Generate Access and Refresh Tokens
 - After filling out config.json and creating the .env file as instructed, run the following script to generate and print the ACCESS_TOKEN and REFRESH_TOKEN in the terminal:
-```python import_requests.py```
+```bash
+python import_requests.py
+```
 - Use this information to complete the ACCESS_TOKEN and REFRESH_TOKEN fields in the .env file.
 
 ### 7. Download Zoom Recordings to Google Drive
 - To back up Zoom recordings to your local Google Drive folder, run the following command:
-```python zoom_recordings.py```
+```bash
+python zoom_recordings.py
+```
 
 ### 8. Verify Sync Quality
 - After the Zoom recordings have been downloaded, run the following script to verify the quality of the local sync against the recordings on Zoom:
-```python sync_check.py```
+```bash
+python sync_check.py
+```
 This script will check for any missing or mismatched files between the local folders and the Zoom recordings.
 
