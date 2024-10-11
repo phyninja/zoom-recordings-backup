@@ -15,7 +15,7 @@ pip install -r requirements.txt
 
 ### 3. Obtain Zoom API Credentials
 To access Zoom recordings, you will need to create/use the already-created Zoom app and get the necessary credentials.
-Visit the Zoom Marketplace and get the `Client ID` and `Client Secret` from the app *Codingal Cloud Recordings Backup*
+To use the already-created Zoom app, visit the Zoom Marketplace using the Zoom account vivek@codingal.com and get the `Client ID` and `Client Secret` from the app *Codingal Cloud Recordings Backup*
 
 ### 4. Set Up the Configuration File
 1. Copy the example configuration file:
